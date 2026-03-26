@@ -2,215 +2,249 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>রিকশা ট্র্যাকার — Rickshaw Payment Tracker</title>
-<link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&family=Space+Grotesk:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>রিকশা ট্র্যাকার</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0d0f0e;
-    --surface: #141714;
-    --card: #1a1f1a;
-    --card2: #1e241e;
-    --border: #2a322a;
-    --accent: #4caf6e;
-    --accent2: #81c784;
-    --accent3: #a5d6a7;
-    --danger: #ef5350;
-    --warn: #ffb74d;
-    --text: #e8f0e9;
-    --text2: #9ab09c;
-    --text3: #5a6e5c;
-    --font: 'Space Grotesk', sans-serif;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; }
+:root {
+  --bg:#0c0e0d; --surface:#141714; --card:#181d18; --card2:#1d231d;
+  --border:#263026; --accent:#4caf6e; --accent2:#81c784;
+  --danger:#ef5350; --warn:#ffb74d; --info:#64b5f6;
+  --text:#e8f0e9; --text2:#8fa891; --text3:#4e5e50;
+  --font:'Space Grotesk',sans-serif;
+  --r:12px; --r2:8px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{font-size:15px}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;padding-bottom:80px}
 
-  /* HEADER */
-  header {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 0 24px;
-    display: flex; align-items: center; justify-content: space-between;
-    height: 60px; position: sticky; top: 0; z-index: 100;
-  }
-  .logo { display: flex; align-items: center; gap: 10px; }
-  .logo-icon { font-size: 26px; }
-  .logo-text { font-family: 'Bebas Neue'; font-size: 22px; letter-spacing: 2px; color: var(--accent); }
-  .logo-sub { font-size: 11px; color: var(--text3); letter-spacing: 1px; text-transform: uppercase; }
-  .header-right { display: flex; align-items: center; gap: 8px; }
-  .nav-btn {
-    background: none; border: 1px solid var(--border); color: var(--text2);
-    padding: 6px 14px; border-radius: 6px; cursor: pointer; font-family: var(--font);
-    font-size: 13px; transition: all .2s;
-  }
-  .nav-btn:hover, .nav-btn.active { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 600; }
+/* HEADER */
+header{
+  background:var(--surface);border-bottom:1px solid var(--border);
+  padding:0 16px;height:56px;display:flex;align-items:center;
+  justify-content:space-between;position:sticky;top:0;z-index:100;
+}
+.logo{display:flex;align-items:center;gap:8px}
+.logo-icon{font-size:24px}
+.logo-text{font-family:'Bebas Neue';font-size:20px;letter-spacing:2px;color:var(--accent)}
+.logo-sub{font-size:10px;color:var(--text3);letter-spacing:1px;text-transform:uppercase}
+.header-btn{background:var(--card2);border:1px solid var(--border);color:var(--text2);
+  padding:6px 12px;border-radius:6px;cursor:pointer;font-family:var(--font);font-size:12px}
 
-  /* LAYOUT */
-  .app { max-width: 1200px; margin: 0 auto; padding: 24px 16px; }
+/* BOTTOM NAV */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;
+  background:var(--surface);border-top:1px solid var(--border);
+  display:flex;z-index:100;
+}
+.bnav-btn{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:8px 4px;cursor:pointer;border:none;background:none;color:var(--text3);
+  font-family:var(--font);font-size:10px;gap:3px;transition:color .2s;
+}
+.bnav-btn .bicon{font-size:20px;line-height:1}
+.bnav-btn.active{color:var(--accent)}
 
-  /* TABS */
-  .tab-view { display: none; }
-  .tab-view.active { display: block; }
+/* LAYOUT */
+.app{max-width:900px;margin:0 auto;padding:16px 12px}
+.tab-view{display:none}
+.tab-view.active{display:block}
 
-  /* STATS GRID */
-  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 28px; }
-  .stat-card {
-    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
-    padding: 18px 20px; position: relative; overflow: hidden;
-  }
-  .stat-card::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-    background: var(--accent);
-  }
-  .stat-card.danger::before { background: var(--danger); }
-  .stat-card.warn::before { background: var(--warn); }
-  .stat-card.blue::before { background: #64b5f6; }
-  .stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text3); margin-bottom: 8px; }
-  .stat-value { font-family: 'Bebas Neue'; font-size: 32px; color: var(--text); line-height: 1; }
-  .stat-value span { font-size: 14px; font-family: var(--font); color: var(--text2); margin-left: 4px; }
-  .stat-sub { font-size: 12px; color: var(--text3); margin-top: 5px; }
+/* STATS GRID */
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:20px}
+@media(min-width:500px){.stats-grid{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:800px){.stats-grid{grid-template-columns:repeat(6,1fr)}}
+.stat-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r);
+  padding:14px;position:relative;overflow:hidden;
+}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent)}
+.stat-card.danger::before{background:var(--danger)}
+.stat-card.warn::before{background:var(--warn)}
+.stat-card.info::before{background:var(--info)}
+.stat-label{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin-bottom:6px}
+.stat-value{font-family:'Bebas Neue';font-size:24px;line-height:1}
+.stat-sub{font-size:11px;color:var(--text3);margin-top:4px}
 
-  /* SECTION TITLE */
-  .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-  .section-title { font-family: 'Bebas Neue'; font-size: 20px; letter-spacing: 2px; color: var(--accent); }
+/* SECTION HEADER */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+.section-title{font-family:'Bebas Neue';font-size:18px;letter-spacing:2px;color:var(--accent)}
 
-  /* BUTTONS */
-  .btn {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 9px 18px; border-radius: 8px; border: none; cursor: pointer;
-    font-family: var(--font); font-size: 13px; font-weight: 600; transition: all .2s;
-  }
-  .btn-primary { background: var(--accent); color: #000; }
-  .btn-primary:hover { background: var(--accent2); }
-  .btn-danger { background: var(--danger); color: #fff; }
-  .btn-danger:hover { background: #e53935; }
-  .btn-ghost { background: var(--card2); color: var(--text2); border: 1px solid var(--border); }
-  .btn-ghost:hover { background: var(--border); color: var(--text); }
-  .btn-sm { padding: 5px 12px; font-size: 12px; }
-  .btn-warn { background: var(--warn); color: #000; }
+/* BUTTONS */
+.btn{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:8px 16px;border-radius:var(--r2);border:none;cursor:pointer;
+  font-family:var(--font);font-size:13px;font-weight:600;transition:all .15s;white-space:nowrap;
+}
+.btn-primary{background:var(--accent);color:#000}
+.btn-primary:hover{background:var(--accent2)}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-ghost{background:var(--card2);color:var(--text2);border:1px solid var(--border)}
+.btn-ghost:hover{color:var(--text)}
+.btn-sm{padding:5px 10px;font-size:11px}
 
-  /* RICKSHAW CARDS */
-  .rickshaw-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 18px; }
-  .rickshaw-card {
-    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
-    padding: 20px; transition: border-color .2s;
-  }
-  .rickshaw-card:hover { border-color: var(--accent); }
-  .rk-head { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
-  .rk-name { font-size: 17px; font-weight: 700; color: var(--text); }
-  .rk-number { font-size: 12px; color: var(--text3); margin-top: 2px; }
-  .rk-rent { text-align: right; }
-  .rk-rent-val { font-family: 'Bebas Neue'; font-size: 26px; color: var(--accent); }
-  .rk-rent-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; }
-  .rk-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 16px; }
-  .rk-stat { background: var(--card2); border-radius: 8px; padding: 10px; text-align: center; }
-  .rk-stat-val { font-size: 18px; font-weight: 700; color: var(--text); }
-  .rk-stat-lbl { font-size: 10px; color: var(--text3); text-transform: uppercase; margin-top: 3px; }
-  .rk-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-  .badge {
-    display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600;
-  }
-  .badge-green { background: #1b3a22; color: var(--accent); }
-  .badge-red { background: #3a1b1b; color: var(--danger); }
-  .badge-yellow { background: #3a2e1b; color: var(--warn); }
+/* RICKSHAW PROFILE CARD */
+.rk-profile{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r);
+  margin-bottom:16px;overflow:hidden;
+}
+.rk-profile-header{
+  padding:14px 16px;display:flex;align-items:flex-start;gap:12px;
+  border-bottom:1px solid var(--border);
+}
+.rk-avatar{
+  width:44px;height:44px;border-radius:50%;background:var(--card2);
+  border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;
+  font-size:20px;flex-shrink:0;
+}
+.rk-info{flex:1;min-width:0}
+.rk-info-name{font-size:15px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.rk-info-sub{font-size:12px;color:var(--text3);margin-top:2px}
+.rk-info-rent{font-family:'Bebas Neue';font-size:16px;color:var(--accent);margin-top:2px}
 
-  /* TABLE */
-  .table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); }
-  table { width: 100%; border-collapse: collapse; }
-  thead { background: var(--card2); }
-  th { padding: 12px 16px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text3); white-space: nowrap; }
-  td { padding: 12px 16px; font-size: 13px; border-top: 1px solid var(--border); vertical-align: middle; }
-  tr:hover td { background: rgba(76,175,110,0.04); }
-  .td-amount { font-weight: 700; color: var(--accent); font-family: 'Bebas Neue'; font-size: 16px; }
-  .td-amount.neg { color: var(--danger); }
+/* DUE BANNER */
+.due-row{
+  padding:12px 16px;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;
+}
+.due-row.has-due{background:rgba(239,83,80,.08);border-bottom:1px solid rgba(239,83,80,.2)}
+.due-row.no-due{background:rgba(76,175,110,.06);border-bottom:1px solid rgba(76,175,110,.15)}
+.due-title{font-size:13px;font-weight:700;margin-bottom:3px}
+.due-breakdown{font-size:11px;color:var(--text2);line-height:1.7}
+.due-breakdown b{font-weight:600}
+.due-total{font-family:'Bebas Neue';font-size:26px;flex-shrink:0}
 
-  /* MODAL */
-  .modal-overlay {
-    display: none; position: fixed; inset: 0; background: rgba(0,0,0,.75);
-    z-index: 200; align-items: center; justify-content: center; padding: 16px;
-  }
-  .modal-overlay.open { display: flex; }
-  .modal {
-    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
-    padding: 28px; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto;
-  }
-  .modal-title { font-family: 'Bebas Neue'; font-size: 22px; letter-spacing: 2px; color: var(--accent); margin-bottom: 20px; }
-  .form-group { margin-bottom: 16px; }
-  label { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--text3); margin-bottom: 6px; }
-  input, select, textarea {
-    width: 100%; background: var(--card2); border: 1px solid var(--border);
-    border-radius: 8px; padding: 10px 14px; color: var(--text); font-family: var(--font);
-    font-size: 14px; outline: none; transition: border-color .2s;
-  }
-  input:focus, select:focus, textarea:focus { border-color: var(--accent); }
-  select option { background: var(--card2); }
-  textarea { resize: vertical; min-height: 80px; }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .modal-actions { display: flex; gap: 10px; margin-top: 22px; justify-content: flex-end; }
+/* PROFILE STATS */
+.rk-profile-stats{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--border)}
+@media(max-width:420px){.rk-profile-stats{grid-template-columns:repeat(2,1fr)}}
+.rk-pstat{padding:10px 8px;text-align:center;border-right:1px solid var(--border)}
+.rk-pstat:last-child{border-right:none}
+.rk-pstat:nth-child(2):last-child{border-right:none}
+.rk-pstat-val{font-family:'Bebas Neue';font-size:18px}
+.rk-pstat-lbl{font-size:9px;color:var(--text3);text-transform:uppercase;margin-top:2px;line-height:1.3}
 
-  /* MONTH NAV */
-  .month-nav { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
-  .month-nav-btn { background: var(--card); border: 1px solid var(--border); color: var(--text2); width: 36px; height: 36px; border-radius: 8px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all .2s; }
-  .month-nav-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .month-display { font-family: 'Bebas Neue'; font-size: 22px; letter-spacing: 2px; color: var(--text); }
+/* PROGRESS */
+.progress-wrap{padding:0 16px 12px}
+.progress-label{font-size:11px;color:var(--text3);margin-bottom:4px}
+.progress-bar{background:var(--card2);border-radius:4px;height:5px;overflow:hidden}
+.progress-fill{height:100%;border-radius:4px;background:var(--accent);transition:width .4s}
+.progress-fill.red{background:var(--danger)}
 
-  /* CALENDAR */
-  .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-top: 12px; }
-  .cal-day-label { text-align: center; font-size: 11px; color: var(--text3); text-transform: uppercase; padding: 6px 0; }
-  .cal-day {
-    aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
-    border-radius: 8px; font-size: 13px; font-weight: 500; position: relative; cursor: pointer;
-    border: 1px solid transparent; transition: all .15s;
-  }
-  .cal-day.empty { cursor: default; }
-  .cal-day.paid { background: #1b3a22; color: var(--accent); border-color: var(--accent); }
-  .cal-day.today { border-color: var(--warn) !important; }
-  .cal-day:not(.empty):not(.paid):hover { background: var(--card2); border-color: var(--border); }
-  .cal-day .dot { position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
+/* CALENDAR */
+.cal-toggle{
+  padding:8px 16px;font-size:12px;color:var(--text3);cursor:pointer;
+  display:flex;align-items:center;gap:6px;user-select:none;
+}
+.cal-toggle:hover{color:var(--text2)}
+.cal-body{padding:0 14px 14px;display:none}
+.cal-body.open{display:block}
+.cal-legend{display:flex;gap:12px;font-size:10px;color:var(--text3);margin-bottom:8px;flex-wrap:wrap}
+.cal-legend span{display:flex;align-items:center;gap:4px}
+.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.cal-day-label{text-align:center;font-size:9px;color:var(--text3);text-transform:uppercase;padding:3px 0}
+.cal-day{
+  aspect-ratio:1;display:flex;align-items:center;justify-content:center;
+  border-radius:5px;font-size:10px;font-weight:500;border:1px solid transparent;
+}
+.cal-day.empty{opacity:0}
+.cal-day.paid{background:#1b3a22;color:var(--accent);border-color:rgba(76,175,110,.5)}
+.cal-day.missed{background:#2a1515;color:var(--danger)}
+.cal-day.future{color:var(--text3)}
+.cal-day.today{border-color:var(--warn)!important;font-weight:700}
 
-  /* PROGRESS BAR */
-  .progress-bar { background: var(--card2); border-radius: 4px; height: 6px; overflow: hidden; margin-top: 6px; }
-  .progress-fill { height: 100%; border-radius: 4px; background: var(--accent); transition: width .4s; }
+/* PROFILE ACTIONS */
+.rk-profile-actions{padding:10px 16px;display:flex;gap:8px;flex-wrap:wrap}
 
-  /* EMPTY STATE */
-  .empty-state { text-align: center; padding: 60px 20px; color: var(--text3); }
-  .empty-state .icon { font-size: 48px; margin-bottom: 16px; }
-  .empty-state h3 { font-size: 16px; color: var(--text2); margin-bottom: 8px; }
-  .empty-state p { font-size: 13px; }
+/* MODAL */
+.modal-overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);
+  z-index:200;align-items:flex-end;justify-content:center;
+}
+@media(min-width:600px){.modal-overlay{align-items:center;padding:16px}}
+.modal-overlay.open{display:flex}
+.modal{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px 16px 0 0;padding:20px 18px;width:100%;max-height:92vh;overflow-y:auto;
+}
+@media(min-width:600px){.modal{border-radius:16px;max-width:480px}}
+.modal-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px}
+.modal-title{font-family:'Bebas Neue';font-size:20px;letter-spacing:2px;color:var(--accent);margin-bottom:16px}
+.form-group{margin-bottom:14px}
+label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin-bottom:5px}
+input,select,textarea{
+  width:100%;background:var(--card2);border:1px solid var(--border);
+  border-radius:var(--r2);padding:10px 12px;color:var(--text);font-family:var(--font);
+  font-size:14px;outline:none;transition:border-color .2s;
+}
+input:focus,select:focus,textarea:focus{border-color:var(--accent)}
+select option{background:var(--card2)}
+textarea{resize:vertical;min-height:65px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.modal-actions{display:flex;gap:8px;margin-top:18px}
+.modal-actions .btn{flex:1;justify-content:center}
+.helper{font-size:11px;color:var(--text3);margin-top:4px;line-height:1.4}
 
-  /* TOAST */
-  #toast {
-    position: fixed; bottom: 24px; right: 24px; background: var(--card);
-    border: 1px solid var(--accent); color: var(--accent); padding: 12px 20px;
-    border-radius: 10px; font-size: 14px; z-index: 999; transform: translateY(80px);
-    opacity: 0; transition: all .3s; pointer-events: none;
-  }
-  #toast.show { transform: translateY(0); opacity: 1; }
-  #toast.error { border-color: var(--danger); color: var(--danger); }
+/* MONTH NAV */
+.month-nav{display:flex;align-items:center;gap:8px}
+.month-nav-btn{
+  background:var(--card);border:1px solid var(--border);color:var(--text2);
+  width:30px;height:30px;border-radius:var(--r2);cursor:pointer;font-size:16px;
+  display:flex;align-items:center;justify-content:center;
+}
+.month-nav-btn:hover{border-color:var(--accent);color:var(--accent)}
+.month-display{font-family:'Bebas Neue';font-size:16px;letter-spacing:1px;color:var(--text)}
 
-  /* FILTER ROW */
-  .filter-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
-  .filter-row input, .filter-row select { width: auto; flex: 1; min-width: 140px; }
+/* SUMMARY ROW */
+.summary-row{
+  background:var(--card2);border-radius:var(--r);padding:12px 14px;
+  display:flex;gap:18px;flex-wrap:wrap;margin-bottom:14px;
+  border:1px solid var(--border);
+}
+.summary-item .lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--text3)}
+.summary-item .val{font-family:'Bebas Neue';font-size:20px}
+.val-green{color:var(--accent)}
+.val-red{color:var(--danger)}
+.val-warn{color:var(--warn)}
 
-  .divider { height: 1px; background: var(--border); margin: 24px 0; }
+/* FILTER ROW */
+.filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.filter-row input,.filter-row select{width:auto;flex:1;min-width:120px;font-size:13px;padding:8px 10px}
 
-  /* SUMMARY ROW */
-  .summary-row { background: var(--card2); border-radius: 8px; padding: 14px 16px; display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 20px; }
-  .summary-item { display: flex; flex-direction: column; }
-  .summary-item .lbl { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text3); }
-  .summary-item .val { font-family: 'Bebas Neue'; font-size: 22px; }
-  .val-green { color: var(--accent); }
-  .val-red { color: var(--danger); }
-  .val-white { color: var(--text); }
+/* BADGE */
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600}
+.badge-green{background:#1b3a22;color:var(--accent)}
+.badge-red{background:#3a1b1b;color:var(--danger)}
+.badge-yellow{background:#3a2e1b;color:var(--warn)}
 
-  /* RESPONSIVE */
-  @media (max-width: 600px) {
-    .stats-grid { grid-template-columns: 1fr 1fr; }
-    .rickshaw-grid { grid-template-columns: 1fr; }
-    .form-row { grid-template-columns: 1fr; }
-    header { padding: 0 12px; }
-    .logo-text { font-size: 18px; }
-  }
+/* MOBILE CARDS */
+.mobile-list{display:flex;flex-direction:column;gap:8px}
+.mobile-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px}
+.mc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.mc-name{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px}
+.mc-meta{font-size:11px;color:var(--text3);display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.mc-right{text-align:right;flex-shrink:0}
+.mc-amount{font-family:'Bebas Neue';font-size:20px}
+
+/* REPORT */
+.report-rk{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:12px}
+.report-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px}
+.report-row:last-child{border-bottom:none;padding-top:8px;font-weight:700}
+.divider{height:1px;background:var(--border);margin:18px 0}
+
+/* EMPTY */
+.empty-state{text-align:center;padding:50px 20px;color:var(--text3)}
+.empty-state .icon{font-size:40px;margin-bottom:12px}
+.empty-state h3{font-size:15px;color:var(--text2);margin-bottom:6px}
+
+/* TOAST */
+#toast{
+  position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(16px);
+  background:var(--card);border:1px solid var(--accent);color:var(--accent);
+  padding:10px 20px;border-radius:10px;font-size:13px;z-index:999;
+  opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap;
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast.error{border-color:var(--danger);color:var(--danger)}
 </style>
 </head>
 <body>
@@ -223,67 +257,47 @@
       <div class="logo-sub">রিকশা পেমেন্ট ট্র্যাকার</div>
     </div>
   </div>
-  <div class="header-right">
-    <button class="nav-btn active" onclick="switchTab('dashboard')">Dashboard</button>
-    <button class="nav-btn" onclick="switchTab('payments')">Payments</button>
-    <button class="nav-btn" onclick="switchTab('expenses')">Expenses</button>
-    <button class="nav-btn" onclick="switchTab('rickshaws')">Rickshaws</button>
-    <button class="nav-btn" onclick="switchTab('reports')">Reports</button>
-  </div>
+  <button class="header-btn" onclick="exportData()">⬇ Export</button>
 </header>
 
 <div class="app">
 
-  <!-- ══════ DASHBOARD ══════ -->
+  <!-- DASHBOARD -->
   <div id="tab-dashboard" class="tab-view active">
     <div id="stats-grid" class="stats-grid"></div>
-
     <div class="section-header">
-      <span class="section-title">🛺 Rickshaw Status</span>
+      <span class="section-title">🛺 Rickshaw Profiles</span>
       <div class="month-nav">
         <button class="month-nav-btn" onclick="changeMonth(-1)">‹</button>
         <span class="month-display" id="month-display"></span>
         <button class="month-nav-btn" onclick="changeMonth(1)">›</button>
       </div>
     </div>
-    <div id="rickshaw-status-grid" class="rickshaw-grid"></div>
+    <div id="rickshaw-profiles"></div>
   </div>
 
-  <!-- ══════ PAYMENTS ══════ -->
+  <!-- PAYMENTS -->
   <div id="tab-payments" class="tab-view">
     <div class="section-header">
-      <span class="section-title">💰 Payment Records</span>
-      <button class="btn btn-primary" onclick="openModal('payment')">+ Add Payment</button>
+      <span class="section-title">💰 Payments</span>
+      <button class="btn btn-primary" onclick="openModal('payment')">+ Add</button>
     </div>
     <div class="filter-row">
-      <select id="pay-filter-rickshaw" onchange="renderPayments()">
-        <option value="">All Rickshaws</option>
-      </select>
+      <select id="pay-filter-rickshaw" onchange="renderPayments()"><option value="">All Rickshaws</option></select>
       <input type="month" id="pay-filter-month" onchange="renderPayments()">
     </div>
     <div id="summary-payments" class="summary-row"></div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th><th>Rickshaw</th><th>User</th><th>Days Covered</th><th>Amount (৳)</th><th>Note</th><th>Action</th>
-          </tr>
-        </thead>
-        <tbody id="payments-tbody"></tbody>
-      </table>
-    </div>
+    <div id="payments-list" class="mobile-list"></div>
   </div>
 
-  <!-- ══════ EXPENSES ══════ -->
+  <!-- EXPENSES -->
   <div id="tab-expenses" class="tab-view">
     <div class="section-header">
       <span class="section-title">🔧 Expenses</span>
-      <button class="btn btn-primary" onclick="openModal('expense')">+ Add Expense</button>
+      <button class="btn btn-primary" onclick="openModal('expense')">+ Add</button>
     </div>
     <div class="filter-row">
-      <select id="exp-filter-rickshaw" onchange="renderExpenses()">
-        <option value="">All Rickshaws</option>
-      </select>
+      <select id="exp-filter-rickshaw" onchange="renderExpenses()"><option value="">All Rickshaws</option></select>
       <select id="exp-filter-cat" onchange="renderExpenses()">
         <option value="">All Categories</option>
         <option>Repair</option><option>Maintenance</option><option>Fuel</option>
@@ -292,31 +306,22 @@
       <input type="month" id="exp-filter-month" onchange="renderExpenses()">
     </div>
     <div id="summary-expenses" class="summary-row"></div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th><th>Rickshaw</th><th>Category</th><th>Description</th><th>Amount (৳)</th><th>Action</th>
-          </tr>
-        </thead>
-        <tbody id="expenses-tbody"></tbody>
-      </table>
-    </div>
+    <div id="expenses-list" class="mobile-list"></div>
   </div>
 
-  <!-- ══════ RICKSHAWS ══════ -->
+  <!-- RICKSHAWS -->
   <div id="tab-rickshaws" class="tab-view">
     <div class="section-header">
-      <span class="section-title">🛺 Manage Rickshaws</span>
-      <button class="btn btn-primary" onclick="openModal('rickshaw')">+ Add Rickshaw</button>
+      <span class="section-title">🛺 Manage</span>
+      <button class="btn btn-primary" onclick="openModal('rickshaw')">+ Add</button>
     </div>
-    <div id="rickshaws-list" class="rickshaw-grid"></div>
+    <div id="rickshaws-manage"></div>
   </div>
 
-  <!-- ══════ REPORTS ══════ -->
+  <!-- REPORTS -->
   <div id="tab-reports" class="tab-view">
     <div class="section-header">
-      <span class="section-title">📊 Monthly Report</span>
+      <span class="section-title">📊 Report</span>
       <div class="month-nav">
         <button class="month-nav-btn" onclick="changeReportMonth(-1)">‹</button>
         <span class="month-display" id="report-month-display"></span>
@@ -326,55 +331,72 @@
     <div id="report-content"></div>
   </div>
 
-</div><!-- end .app -->
+</div>
 
-<!-- ══════════ MODALS ══════════ -->
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <button class="bnav-btn active" onclick="switchTab('dashboard',this)"><span class="bicon">🏠</span>Home</button>
+  <button class="bnav-btn" onclick="switchTab('payments',this)"><span class="bicon">💰</span>Pay</button>
+  <button class="bnav-btn" onclick="switchTab('expenses',this)"><span class="bicon">🔧</span>Expense</button>
+  <button class="bnav-btn" onclick="switchTab('rickshaws',this)"><span class="bicon">🛺</span>Rickshaws</button>
+  <button class="bnav-btn" onclick="switchTab('reports',this)"><span class="bicon">📊</span>Report</button>
+</nav>
 
-<!-- Add Rickshaw -->
+<!-- MODAL: Rickshaw -->
 <div id="modal-rickshaw" class="modal-overlay">
   <div class="modal">
-    <div class="modal-title" id="modal-rickshaw-title">Add New Rickshaw</div>
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-rickshaw-title">Add Rickshaw</div>
     <input type="hidden" id="rkEdit-id">
     <div class="form-group">
-      <label>Rickshaw Name / Number</label>
-      <input type="text" id="rk-name" placeholder="e.g. Rickshaw #1 or Dilay's Blue">
+      <label>Rickshaw Name</label>
+      <input type="text" id="rk-name" placeholder="e.g. Rickshaw #1">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Vehicle No.</label>
+        <input type="text" id="rk-number" placeholder="DHA-001">
+      </div>
+      <div class="form-group">
+        <label>Daily Rent (৳)</label>
+        <input type="number" id="rk-rent" placeholder="200" min="0">
+      </div>
     </div>
     <div class="form-group">
-      <label>Registration / Vehicle Number (optional)</label>
-      <input type="text" id="rk-number" placeholder="e.g. DHA-1234">
-    </div>
-    <div class="form-group">
-      <label>Rider / User Name</label>
+      <label>Driver Name</label>
       <input type="text" id="rk-user" placeholder="e.g. Dilay">
     </div>
     <div class="form-row">
       <div class="form-group">
-        <label>Daily Rent (৳)</label>
-        <input type="number" id="rk-rent" placeholder="e.g. 200" min="0">
-      </div>
-      <div class="form-group">
         <label>Start Date</label>
         <input type="date" id="rk-start">
+        <div class="helper">Due auto-calculates from this date</div>
+      </div>
+      <div class="form-group">
+        <label>Opening Due (৳)</label>
+        <input type="number" id="rk-opening-due" placeholder="0" min="0">
+        <div class="helper">Old unpaid balance before start date</div>
       </div>
     </div>
     <div class="form-group">
-      <label>Notes (optional)</label>
+      <label>Notes</label>
       <textarea id="rk-notes" placeholder="Any extra info..."></textarea>
     </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeModal('rickshaw')">Cancel</button>
-      <button class="btn btn-primary" onclick="saveRickshaw()">Save Rickshaw</button>
+      <button class="btn btn-primary" onclick="saveRickshaw()">Save</button>
     </div>
   </div>
 </div>
 
-<!-- Add Payment -->
+<!-- MODAL: Payment -->
 <div id="modal-payment" class="modal-overlay">
   <div class="modal">
+    <div class="modal-handle"></div>
     <div class="modal-title">Add Payment</div>
     <div class="form-group">
-      <label>Rickshaw</label>
-      <select id="pay-rickshaw"></select>
+      <label>Rickshaw / Driver</label>
+      <select id="pay-rickshaw" onchange="updatePayHint()"></select>
     </div>
     <div class="form-row">
       <div class="form-group">
@@ -383,38 +405,38 @@
       </div>
       <div class="form-group">
         <label>Amount (৳)</label>
-        <input type="number" id="pay-amount" placeholder="e.g. 600" min="0">
+        <input type="number" id="pay-amount" placeholder="e.g. 600" min="0" oninput="autoCalcDays()">
       </div>
     </div>
     <div class="form-group">
-      <label>Days This Payment Covers</label>
-      <input type="number" id="pay-days" placeholder="e.g. 3 (if paying 3 days at once)" min="1">
-      <div style="font-size:11px;color:var(--text3);margin-top:5px;">If paying multiple missed days, enter how many days this covers.</div>
+      <label>Days Covered</label>
+      <input type="number" id="pay-days" placeholder="1" min="1" oninput="autoCalcAmount()">
+      <div class="helper" id="pay-hint">If paying for multiple missed days, enter total days. Amount or days auto-fills.</div>
     </div>
     <div class="form-group">
-      <label>Date Range (optional — start of covered period)</label>
-      <input type="date" id="pay-from" placeholder="Covered from date">
+      <label>Covered From (optional)</label>
+      <input type="date" id="pay-from">
+      <div class="helper">First day this payment covers — marks calendar green</div>
     </div>
     <div class="form-group">
-      <label>Note (optional)</label>
-      <input type="text" id="pay-note" placeholder="e.g. 3 days late payment">
+      <label>Note</label>
+      <input type="text" id="pay-note" placeholder="e.g. 3 days combined payment">
     </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeModal('payment')">Cancel</button>
-      <button class="btn btn-primary" onclick="savePayment()">Save Payment</button>
+      <button class="btn btn-primary" onclick="savePayment()">Save</button>
     </div>
   </div>
 </div>
 
-<!-- Add Expense -->
+<!-- MODAL: Expense -->
 <div id="modal-expense" class="modal-overlay">
   <div class="modal">
+    <div class="modal-handle"></div>
     <div class="modal-title">Add Expense</div>
     <div class="form-group">
-      <label>Rickshaw (or General)</label>
-      <select id="exp-rickshaw">
-        <option value="general">General (not rickshaw-specific)</option>
-      </select>
+      <label>Rickshaw</label>
+      <select id="exp-rickshaw"><option value="general">General</option></select>
     </div>
     <div class="form-row">
       <div class="form-group">
@@ -431,7 +453,7 @@
     </div>
     <div class="form-group">
       <label>Amount (৳)</label>
-      <input type="number" id="exp-amount" placeholder="e.g. 500" min="0">
+      <input type="number" id="exp-amount" placeholder="500" min="0">
     </div>
     <div class="form-group">
       <label>Description</label>
@@ -439,7 +461,7 @@
     </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeModal('expense')">Cancel</button>
-      <button class="btn btn-primary" onclick="saveExpense()">Save Expense</button>
+      <button class="btn btn-primary" onclick="saveExpense()">Save</button>
     </div>
   </div>
 </div>
@@ -447,648 +469,579 @@
 <div id="toast"></div>
 
 <script>
-// ═══════════════════════════════════════════
-// DATA LAYER — localStorage
-// ═══════════════════════════════════════════
-const DB = {
-  get: (k) => JSON.parse(localStorage.getItem(k) || 'null'),
-  set: (k, v) => localStorage.setItem(k, JSON.stringify(v)),
-};
-const getRickshaws = () => DB.get('rickshaws') || [];
-const getPayments  = () => DB.get('payments')  || [];
-const getExpenses  = () => DB.get('expenses')  || [];
-const saveRickshaws = (d) => DB.set('rickshaws', d);
-const savePayments  = (d) => DB.set('payments', d);
-const saveExpenses  = (d) => DB.set('expenses', d);
-const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+// ═══════════════ DATA ═══════════════
+const DB={get:k=>JSON.parse(localStorage.getItem(k)||'null'),set:(k,v)=>localStorage.setItem(k,JSON.stringify(v))};
+const getRickshaws=()=>DB.get('rk_rickshaws')||[];
+const getPayments=()=>DB.get('rk_payments')||[];
+const getExpenses=()=>DB.get('rk_expenses')||[];
+const saveRickshaws=d=>DB.set('rk_rickshaws',d);
+const savePayments=d=>DB.set('rk_payments',d);
+const saveExpenses=d=>DB.set('rk_expenses',d);
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,5);
 
-// ═══════════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════════
-let currentTab = 'dashboard';
-const today = new Date();
-let dashMonth = { y: today.getFullYear(), m: today.getMonth() };
-let reportMonth = { y: today.getFullYear(), m: today.getMonth() };
+// ═══════════════ STATE ═══════════════
+const today=new Date();
+const todayStr=today.toISOString().split('T')[0];
+let dashMonth={y:today.getFullYear(),m:today.getMonth()};
+let reportMonth={y:today.getFullYear(),m:today.getMonth()};
+const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
 
-const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+// ═══════════════ DUE ENGINE ═══════════════
+// Total due = openingDue + (dailyRent × days elapsed since startDate) − total payments made
+function calcDue(rk){
+  const dailyRent=Number(rk.dailyRent)||0;
+  const openingDue=Number(rk.openingDue)||0;
+  if(!rk.startDate) return {totalDue:openingDue,openingDue,accruedDue:0,totalPaid:0,elapsedDays:0,dailyRent};
+  const start=new Date(rk.startDate+'T00:00:00');
+  const now=new Date(today.getFullYear(),today.getMonth(),today.getDate());
+  const elapsedDays=Math.max(0,Math.floor((now-start)/86400000)+1);
+  const accruedDue=elapsedDays*dailyRent;
+  const totalPaid=getPayments().filter(p=>p.rickshawId===rk.id).reduce((a,p)=>a+Number(p.amount),0);
+  const totalDue=openingDue+accruedDue-totalPaid;
+  return {totalDue,openingDue,accruedDue,totalPaid,elapsedDays,dailyRent};
+}
 
-// ═══════════════════════════════════════════
-// NAV
-// ═══════════════════════════════════════════
-function switchTab(tab) {
-  currentTab = tab;
-  document.querySelectorAll('.tab-view').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('tab-' + tab).classList.add('active');
-  event.target.classList.add('active');
+// Monthly due breakdown for a specific month
+function calcMonthInfo(rk,y,m){
+  const daysInMonth=new Date(y,m+1,0).getDate();
+  const dailyRent=Number(rk.dailyRent)||0;
+  const monthKey=`${y}-${String(m+1).padStart(2,'0')}`;
+  const monthPaid=getPayments().filter(p=>p.rickshawId===rk.id&&p.date.startsWith(monthKey)).reduce((a,p)=>a+Number(p.amount),0);
+  const monthDays=getPayments().filter(p=>p.rickshawId===rk.id&&p.date.startsWith(monthKey)).reduce((a,p)=>a+Number(p.days||1),0);
+  let daysPassed=daysInMonth;
+  if(y===today.getFullYear()&&m===today.getMonth()) daysPassed=today.getDate();
+  const expected=daysInMonth*dailyRent;
+  const accruedThisMonth=daysPassed*dailyRent;
+  const dueThisMonth=Math.max(0,accruedThisMonth-monthPaid);
+  const missedDays=dailyRent>0?Math.floor(dueThisMonth/dailyRent):0;
+  return {daysInMonth,expected,monthPaid,monthDays,daysPassed,dueThisMonth,missedDays};
+}
+
+// ═══════════════ NAV ═══════════════
+function switchTab(tab,btn){
+  document.querySelectorAll('.tab-view').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.bnav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  if(btn)btn.classList.add('active');
   refreshAll();
 }
+function refreshAll(){renderDashboard();renderPayments();renderExpenses();renderManage();renderReport();populateSelects()}
+function changeMonth(d){dashMonth.m+=d;if(dashMonth.m>11){dashMonth.m=0;dashMonth.y++}if(dashMonth.m<0){dashMonth.m=11;dashMonth.y--}renderDashboard()}
+function changeReportMonth(d){reportMonth.m+=d;if(reportMonth.m>11){reportMonth.m=0;reportMonth.y++}if(reportMonth.m<0){reportMonth.m=11;reportMonth.y--}renderReport()}
 
-function refreshAll() {
-  renderDashboard();
-  renderPayments();
-  renderExpenses();
-  renderRickshawsList();
-  renderReport();
-  populateSelects();
-}
+// ═══════════════ DASHBOARD ═══════════════
+function renderDashboard(){
+  const rickshaws=getRickshaws();
+  const payments=getPayments();
+  const expenses=getExpenses();
+  const {y,m}=dashMonth;
+  document.getElementById('month-display').textContent=`${MONTHS[m].slice(0,3)} ${y}`;
+  const mk=`${y}-${String(m+1).padStart(2,'0')}`;
+  const mIncome=payments.filter(p=>p.date.startsWith(mk)).reduce((a,p)=>a+Number(p.amount),0);
+  const mExp=expenses.filter(e=>e.date.startsWith(mk)).reduce((a,e)=>a+Number(e.amount),0);
+  const mNet=mIncome-mExp;
+  const mDays=payments.filter(p=>p.date.startsWith(mk)).reduce((a,p)=>a+Number(p.days||1),0);
+  const totalOutstanding=rickshaws.reduce((a,rk)=>a+Math.max(0,calcDue(rk).totalDue),0);
+  const allIncome=payments.reduce((a,p)=>a+Number(p.amount),0);
+  const allExp=expenses.reduce((a,e)=>a+Number(e.amount),0);
 
-// ═══════════════════════════════════════════
-// MONTH NAV
-// ═══════════════════════════════════════════
-function changeMonth(d) {
-  dashMonth.m += d;
-  if (dashMonth.m > 11) { dashMonth.m = 0; dashMonth.y++; }
-  if (dashMonth.m < 0)  { dashMonth.m = 11; dashMonth.y--; }
-  renderDashboard();
-}
-function changeReportMonth(d) {
-  reportMonth.m += d;
-  if (reportMonth.m > 11) { reportMonth.m = 0; reportMonth.y++; }
-  if (reportMonth.m < 0)  { reportMonth.m = 11; reportMonth.y--; }
-  renderReport();
-}
-
-// ═══════════════════════════════════════════
-// DASHBOARD
-// ═══════════════════════════════════════════
-function renderDashboard() {
-  const rickshaws = getRickshaws();
-  const payments  = getPayments();
-  const expenses  = getExpenses();
-  const { y, m } = dashMonth;
-
-  document.getElementById('month-display').textContent = `${MONTHS[m]} ${y}`;
-
-  // Totals for current month
-  const monthKey = `${y}-${String(m+1).padStart(2,'0')}`;
-  const monthPays = payments.filter(p => p.date.startsWith(monthKey));
-  const monthExps = expenses.filter(e => e.date.startsWith(monthKey));
-  const totalIncome   = monthPays.reduce((a,p) => a + Number(p.amount), 0);
-  const totalExpenses = monthExps.reduce((a,e) => a + Number(e.amount), 0);
-  const totalDays     = monthPays.reduce((a,p) => a + Number(p.days||1), 0);
-  const net = totalIncome - totalExpenses;
-
-  // All-time net
-  const allIncome = payments.reduce((a,p)=>a+Number(p.amount),0);
-  const allExp    = expenses.reduce((a,e)=>a+Number(e.amount),0);
-
-  document.getElementById('stats-grid').innerHTML = `
-    <div class="stat-card">
-      <div class="stat-label">Monthly Income</div>
-      <div class="stat-value">৳${totalIncome.toLocaleString()}</div>
-      <div class="stat-sub">${monthPays.length} payment(s) this month</div>
-    </div>
-    <div class="stat-card danger">
-      <div class="stat-label">Monthly Expenses</div>
-      <div class="stat-value" style="color:var(--danger)">৳${totalExpenses.toLocaleString()}</div>
-      <div class="stat-sub">${monthExps.length} expense(s) this month</div>
-    </div>
-    <div class="stat-card ${net >= 0 ? '' : 'danger'}">
-      <div class="stat-label">Net Profit (${MONTHS[m]})</div>
-      <div class="stat-value" style="color:${net>=0?'var(--accent)':'var(--danger)'}">৳${net.toLocaleString()}</div>
-      <div class="stat-sub">Income minus expenses</div>
-    </div>
-    <div class="stat-card warn">
-      <div class="stat-label">Rent Days Collected</div>
-      <div class="stat-value" style="color:var(--warn)">${totalDays}</div>
-      <div class="stat-sub">Days paid for this month</div>
-    </div>
-    <div class="stat-card blue">
-      <div class="stat-label">Total Rickshaws</div>
-      <div class="stat-value" style="color:#64b5f6">${rickshaws.length}</div>
-      <div class="stat-sub">Registered rickshaws</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">All-Time Net</div>
-      <div class="stat-value" style="color:${(allIncome-allExp)>=0?'var(--accent)':'var(--danger)'}">৳${(allIncome-allExp).toLocaleString()}</div>
-      <div class="stat-sub">Total income ৳${allIncome.toLocaleString()}</div>
-    </div>
+  document.getElementById('stats-grid').innerHTML=`
+    <div class="stat-card"><div class="stat-label">Month Income</div><div class="stat-value" style="color:var(--accent)">৳${fmt(mIncome)}</div><div class="stat-sub">${payments.filter(p=>p.date.startsWith(mk)).length} payments</div></div>
+    <div class="stat-card danger"><div class="stat-label">Month Expense</div><div class="stat-value" style="color:var(--danger)">৳${fmt(mExp)}</div><div class="stat-sub">${expenses.filter(e=>e.date.startsWith(mk)).length} expenses</div></div>
+    <div class="stat-card ${mNet>=0?'':'danger'}"><div class="stat-label">Month Net</div><div class="stat-value" style="color:${mNet>=0?'var(--accent)':'var(--danger)'}">৳${fmt(mNet)}</div><div class="stat-sub">Profit this month</div></div>
+    <div class="stat-card warn"><div class="stat-label">Days Paid</div><div class="stat-value" style="color:var(--warn)">${mDays}</div><div class="stat-sub">Rent days this month</div></div>
+    <div class="stat-card danger"><div class="stat-label">Total Due</div><div class="stat-value" style="color:var(--danger)">৳${fmt(totalOutstanding)}</div><div class="stat-sub">All unpaid balance</div></div>
+    <div class="stat-card info"><div class="stat-label">All-Time Net</div><div class="stat-value" style="color:var(--info)">৳${fmt(allIncome-allExp)}</div><div class="stat-sub">Income − Expenses</div></div>
   `;
 
-  // Rickshaw cards
-  if (!rickshaws.length) {
-    document.getElementById('rickshaw-status-grid').innerHTML = `
-      <div class="empty-state" style="grid-column:1/-1">
-        <div class="icon">🛺</div>
-        <h3>No Rickshaws Yet</h3>
-        <p>Go to <strong>Rickshaws</strong> tab to add your first rickshaw.</p>
-      </div>`;
+  if(!rickshaws.length){
+    document.getElementById('rickshaw-profiles').innerHTML=`<div class="empty-state"><div class="icon">🛺</div><h3>No Rickshaws Yet</h3><p>Tap 🛺 below to add your first rickshaw.</p></div>`;
     return;
   }
 
-  const daysInMonth = new Date(y, m+1, 0).getDate();
-  document.getElementById('rickshaw-status-grid').innerHTML = rickshaws.map(rk => {
-    const rkPays = monthPays.filter(p => p.rickshawId === rk.id);
-    const rkExps = monthExps.filter(e => e.rickshawId === rk.id);
-    const paidDays  = rkPays.reduce((a,p)=>a+Number(p.days||1),0);
-    const paidAmt   = rkPays.reduce((a,p)=>a+Number(p.amount),0);
-    const expAmt    = rkExps.reduce((a,e)=>a+Number(e.amount),0);
-    const expected  = daysInMonth * Number(rk.dailyRent || 0);
-    const pct       = expected > 0 ? Math.min(100, Math.round(paidAmt/expected*100)) : 0;
-    const due       = Math.max(0, expected - paidAmt);
+  let html='';
+  rickshaws.forEach(rk=>{
+    const {totalDue,openingDue,accruedDue,totalPaid,elapsedDays}=calcDue(rk);
+    const {daysInMonth,expected,monthPaid,dueThisMonth,missedDays,daysPassed}=calcMonthInfo(rk,y,m);
+    const pct=expected>0?Math.min(100,Math.round(monthPaid/expected*100)):0;
+    const due=Math.max(0,totalDue);
 
-    // Calendar dots for paid dates
-    const paidDateSet = new Set();
-    rkPays.forEach(p => {
-      if (p.fromDate) {
-        const start = new Date(p.fromDate);
-        for (let i = 0; i < Number(p.days||1); i++) {
-          const d2 = new Date(start); d2.setDate(start.getDate()+i);
-          if (d2.getMonth()===m && d2.getFullYear()===y) paidDateSet.add(d2.getDate());
-        }
-      } else {
-        const d2 = new Date(p.date);
-        if (d2.getMonth()===m && d2.getFullYear()===y) paidDateSet.add(d2.getDate());
+    // calendar
+    const mPays=getPayments().filter(p=>p.rickshawId===rk.id&&p.date.startsWith(`${y}-${String(m+1).padStart(2,'0')}`));
+    const paidDates=new Set();
+    mPays.forEach(p=>{
+      const d0=new Date((p.fromDate||p.date)+'T00:00:00');
+      for(let i=0;i<Number(p.days||1);i++){
+        const di=new Date(d0);di.setDate(d0.getDate()+i);
+        if(di.getMonth()===m&&di.getFullYear()===y)paidDates.add(di.getDate());
       }
     });
-
-    const firstDay = new Date(y, m, 1).getDay();
-    let calHtml = '';
-    ['Su','Mo','Tu','We','Th','Fr','Sa'].forEach(d2 => calHtml += `<div class="cal-day-label">${d2}</div>`);
-    for (let i=0;i<firstDay;i++) calHtml += `<div class="cal-day empty"></div>`;
-    for (let d2=1;d2<=daysInMonth;d2++) {
-      const isToday = (d2===today.getDate()&&m===today.getMonth()&&y===today.getFullYear());
-      const isPaid  = paidDateSet.has(d2);
-      calHtml += `<div class="cal-day ${isPaid?'paid':''} ${isToday?'today':''}" title="${isPaid?'Paid':'Not recorded'}">${d2}</div>`;
+    const firstDay=new Date(y,m,1).getDay();
+    let calHtml='';
+    ['S','M','T','W','T','F','S'].forEach(d=>calHtml+=`<div class="cal-day-label">${d}</div>`);
+    for(let i=0;i<firstDay;i++)calHtml+=`<div class="cal-day empty"></div>`;
+    for(let d=1;d<=daysInMonth;d++){
+      const isToday=d===today.getDate()&&m===today.getMonth()&&y===today.getFullYear();
+      const isPaid=paidDates.has(d);
+      const isFuture=new Date(y,m,d)>today;
+      let cls='cal-day'+(isPaid?' paid':isFuture?' future':' missed')+(isToday?' today':'');
+      calHtml+=`<div class="${cls}">${d}</div>`;
     }
+    const calId=`cal-${rk.id}`;
 
-    return `
-    <div class="rickshaw-card">
-      <div class="rk-head">
-        <div>
-          <div class="rk-name">🛺 ${rk.name}</div>
-          <div class="rk-number">${rk.vehicleNo || ''} · ${rk.userName || ''}</div>
-        </div>
-        <div class="rk-rent">
-          <div class="rk-rent-val">৳${Number(rk.dailyRent||0).toLocaleString()}</div>
-          <div class="rk-rent-label">/ day</div>
-        </div>
-      </div>
-      <div class="rk-stats">
-        <div class="rk-stat">
-          <div class="rk-stat-val" style="color:var(--accent)">৳${paidAmt.toLocaleString()}</div>
-          <div class="rk-stat-lbl">Collected</div>
-        </div>
-        <div class="rk-stat">
-          <div class="rk-stat-val" style="color:var(--warn)">${paidDays}</div>
-          <div class="rk-stat-lbl">Days Paid</div>
-        </div>
-        <div class="rk-stat">
-          <div class="rk-stat-val" style="color:${due>0?'var(--danger)':'var(--accent)'}">৳${due.toLocaleString()}</div>
-          <div class="rk-stat-lbl">Due</div>
+    html+=`
+    <div class="rk-profile">
+      <div class="rk-profile-header">
+        <div class="rk-avatar">🛺</div>
+        <div class="rk-info">
+          <div class="rk-info-name">${rk.name}
+            <span class="badge ${due>0?'badge-red':'badge-green'}">${due>0?'⚠ Due':'✓ Clear'}</span>
+          </div>
+          <div class="rk-info-sub">👤 ${rk.userName||'—'}${rk.vehicleNo?' · '+rk.vehicleNo:''}</div>
+          <div class="rk-info-rent">৳${fmt(Number(rk.dailyRent||0))} / day</div>
         </div>
       </div>
-      <div style="font-size:12px;color:var(--text3);margin-bottom:4px;">Monthly collection progress (${pct}% of ৳${expected.toLocaleString()})</div>
-      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
-      <div style="font-size:11px;color:var(--text3);margin:10px 0 6px;">Expenses this month: <span style="color:var(--danger)">৳${expAmt.toLocaleString()}</span></div>
-      <details style="margin-bottom:12px;">
-        <summary style="font-size:12px;color:var(--text3);cursor:pointer;margin-bottom:8px;">Payment Calendar ${MONTHS[m]}</summary>
+
+      <div class="due-row ${due>0?'has-due':'no-due'}">
+        <div style="flex:1">
+          ${due>0
+            ? `<div class="due-title" style="color:var(--danger)">⚠ Total Outstanding Due</div>
+               <div class="due-breakdown">
+                 ${openingDue>0?`Previous balance: <b style="color:var(--warn)">৳${fmt(openingDue)}</b><br>`:''}
+                 Accrued rent (${elapsedDays} days × ৳${fmt(Number(rk.dailyRent||0))}): <b>৳${fmt(accruedDue)}</b><br>
+                 Total paid: <b style="color:var(--accent)">৳${fmt(totalPaid)}</b>
+               </div>`
+            : `<div class="due-title" style="color:var(--accent)">✓ No Outstanding Balance</div>
+               <div class="due-breakdown">All rent paid up to date · Paid ৳${fmt(totalPaid)} total</div>`
+          }
+        </div>
+        <div class="due-total" style="color:${due>0?'var(--danger)':'var(--accent)'}">৳${fmt(due)}</div>
+      </div>
+
+      <div class="rk-profile-stats">
+        <div class="rk-pstat">
+          <div class="rk-pstat-val" style="color:var(--accent)">৳${fmt(monthPaid)}</div>
+          <div class="rk-pstat-lbl">Paid ${MONTHS[m].slice(0,3)}</div>
+        </div>
+        <div class="rk-pstat">
+          <div class="rk-pstat-val" style="color:${dueThisMonth>0?'var(--danger)':'var(--accent)'}">৳${fmt(dueThisMonth)}</div>
+          <div class="rk-pstat-lbl">This Month Due</div>
+        </div>
+        <div class="rk-pstat">
+          <div class="rk-pstat-val" style="color:var(--warn)">${missedDays}</div>
+          <div class="rk-pstat-lbl">Missed Days</div>
+        </div>
+        <div class="rk-pstat">
+          <div class="rk-pstat-val">${daysPassed}/${daysInMonth}</div>
+          <div class="rk-pstat-lbl">Days Elapsed</div>
+        </div>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-label">${MONTHS[m]} collection: ${pct}% · ৳${fmt(monthPaid)} of ৳${fmt(expected)}</div>
+        <div class="progress-bar"><div class="progress-fill ${pct<50?'red':''}" style="width:${pct}%"></div></div>
+      </div>
+
+      <div class="cal-toggle" onclick="toggleCal('${calId}')">
+        <span id="cico-${calId}">▶</span> Payment Calendar ${MONTHS[m]} ${y}
+        <span style="margin-left:auto;display:flex;gap:10px;font-size:10px">
+          <span style="color:var(--accent)">🟩 Paid</span>
+          <span style="color:var(--danger)">🟥 Missed</span>
+          <span style="color:var(--text3)">⬜ Future</span>
+        </span>
+      </div>
+      <div class="cal-body" id="${calId}">
         <div class="calendar-grid">${calHtml}</div>
-      </details>
-      <div class="rk-actions">
-        <button class="btn btn-primary btn-sm" onclick="quickPayment('${rk.id}')">+ Payment</button>
-        <button class="btn btn-ghost btn-sm" onclick="quickExpense('${rk.id}')">+ Expense</button>
-        <button class="btn btn-ghost btn-sm" onclick="editRickshaw('${rk.id}')">Edit</button>
+      </div>
+
+      <div class="rk-profile-actions">
+        <button class="btn btn-primary btn-sm" onclick="quickPayment('${rk.id}')">💰 Payment</button>
+        <button class="btn btn-ghost btn-sm" onclick="quickExpense('${rk.id}')">🔧 Expense</button>
+        <button class="btn btn-ghost btn-sm" onclick="editRickshaw('${rk.id}')">✏ Edit</button>
+      </div>
+    </div>`;
+  });
+  document.getElementById('rickshaw-profiles').innerHTML=html;
+}
+
+function toggleCal(id){
+  const el=document.getElementById(id);
+  const ico=document.getElementById('cico-'+id);
+  el.classList.toggle('open');
+  ico.textContent=el.classList.contains('open')?'▼':'▶';
+}
+
+// ═══════════════ PAYMENTS ═══════════════
+function renderPayments(){
+  const rks=getRickshaws();
+  let pays=getPayments();
+  const fRk=document.getElementById('pay-filter-rickshaw')?.value||'';
+  const fMo=document.getElementById('pay-filter-month')?.value||'';
+  if(fRk)pays=pays.filter(p=>p.rickshawId===fRk);
+  if(fMo)pays=pays.filter(p=>p.date.startsWith(fMo));
+  pays.sort((a,b)=>b.date.localeCompare(a.date));
+  const tot=pays.reduce((a,p)=>a+Number(p.amount),0);
+  const totD=pays.reduce((a,p)=>a+Number(p.days||1),0);
+  document.getElementById('summary-payments').innerHTML=`
+    <div class="summary-item"><span class="lbl">Records</span><span class="val">${pays.length}</span></div>
+    <div class="summary-item"><span class="lbl">Total Collected</span><span class="val val-green">৳${fmt(tot)}</span></div>
+    <div class="summary-item"><span class="lbl">Days Paid</span><span class="val val-warn">${totD}</span></div>`;
+  const el=document.getElementById('payments-list');
+  if(!pays.length){el.innerHTML=`<div class="empty-state"><div class="icon">💰</div><h3>No payments found</h3></div>`;return}
+  el.innerHTML=pays.map(p=>{
+    const rk=rks.find(r=>r.id===p.rickshawId);
+    return`<div class="mobile-card">
+      <div class="mc-top">
+        <div style="flex:1">
+          <div class="mc-name">🛺 ${rk?rk.name:'Unknown'} · ${rk?rk.userName||'':'—'}</div>
+          <div class="mc-meta">
+            <span>${fmtDate(p.date)}</span>
+            <span class="badge badge-green">${p.days||1} day(s)${p.fromDate?' from '+fmtDate(p.fromDate):''}</span>
+            ${p.note?`<span>${p.note}</span>`:''}
+          </div>
+        </div>
+        <div class="mc-right">
+          <div class="mc-amount" style="color:var(--accent)">৳${fmt(Number(p.amount))}</div>
+          <button class="btn btn-danger btn-sm" style="margin-top:5px" onclick="deletePayment('${p.id}')">Delete</button>
+        </div>
       </div>
     </div>`;
   }).join('');
 }
 
-// ═══════════════════════════════════════════
-// PAYMENTS TAB
-// ═══════════════════════════════════════════
-function renderPayments() {
-  const rickshaws = getRickshaws();
-  let payments = getPayments();
-  const filterRk = document.getElementById('pay-filter-rickshaw')?.value || '';
-  const filterMo = document.getElementById('pay-filter-month')?.value || '';
-
-  if (filterRk) payments = payments.filter(p => p.rickshawId === filterRk);
-  if (filterMo) payments = payments.filter(p => p.date.startsWith(filterMo));
-
-  payments.sort((a,b) => b.date.localeCompare(a.date));
-
-  const total = payments.reduce((a,p)=>a+Number(p.amount),0);
-  const totalDays = payments.reduce((a,p)=>a+Number(p.days||1),0);
-  document.getElementById('summary-payments').innerHTML = `
-    <div class="summary-item"><span class="lbl">Records</span><span class="val val-white">${payments.length}</span></div>
-    <div class="summary-item"><span class="lbl">Total Collected</span><span class="val val-green">৳${total.toLocaleString()}</span></div>
-    <div class="summary-item"><span class="lbl">Total Days Paid</span><span class="val val-white">${totalDays}</span></div>
-  `;
-
-  const tbody = document.getElementById('payments-tbody');
-  if (!payments.length) {
-    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text3)">No payments found.</td></tr>`;
-    return;
-  }
-  tbody.innerHTML = payments.map(p => {
-    const rk = rickshaws.find(r => r.id === p.rickshawId);
-    return `
-    <tr>
-      <td>${fmtDate(p.date)}</td>
-      <td>${rk ? '🛺 '+rk.name : '—'}</td>
-      <td>${rk ? rk.userName||'—' : '—'}</td>
-      <td><span class="badge badge-green">${p.days||1} day(s)${p.fromDate?' (from '+fmtDate(p.fromDate)+')':''}</span></td>
-      <td class="td-amount">৳${Number(p.amount).toLocaleString()}</td>
-      <td style="color:var(--text3);font-size:12px">${p.note||'—'}</td>
-      <td><button class="btn btn-danger btn-sm" onclick="deletePayment('${p.id}')">Delete</button></td>
-    </tr>`;
-  }).join('');
-}
-
-// ═══════════════════════════════════════════
-// EXPENSES TAB
-// ═══════════════════════════════════════════
-function renderExpenses() {
-  const rickshaws = getRickshaws();
-  let expenses = getExpenses();
-  const filterRk  = document.getElementById('exp-filter-rickshaw')?.value || '';
-  const filterCat = document.getElementById('exp-filter-cat')?.value || '';
-  const filterMo  = document.getElementById('exp-filter-month')?.value || '';
-
-  if (filterRk)  expenses = expenses.filter(e => e.rickshawId === filterRk);
-  if (filterCat) expenses = expenses.filter(e => e.category === filterCat);
-  if (filterMo)  expenses = expenses.filter(e => e.date.startsWith(filterMo));
-
-  expenses.sort((a,b) => b.date.localeCompare(a.date));
-
-  const total = expenses.reduce((a,e)=>a+Number(e.amount),0);
-  document.getElementById('summary-expenses').innerHTML = `
-    <div class="summary-item"><span class="lbl">Records</span><span class="val val-white">${expenses.length}</span></div>
-    <div class="summary-item"><span class="lbl">Total Expenses</span><span class="val val-red">৳${total.toLocaleString()}</span></div>
-  `;
-
-  const tbody = document.getElementById('expenses-tbody');
-  if (!expenses.length) {
-    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text3)">No expenses found.</td></tr>`;
-    return;
-  }
-  tbody.innerHTML = expenses.map(e => {
-    const rk = rickshaws.find(r => r.id === e.rickshawId);
-    return `
-    <tr>
-      <td>${fmtDate(e.date)}</td>
-      <td>${rk ? '🛺 '+rk.name : 'General'}</td>
-      <td><span class="badge badge-yellow">${e.category}</span></td>
-      <td style="font-size:13px;color:var(--text2)">${e.description||'—'}</td>
-      <td class="td-amount neg">৳${Number(e.amount).toLocaleString()}</td>
-      <td><button class="btn btn-danger btn-sm" onclick="deleteExpense('${e.id}')">Delete</button></td>
-    </tr>`;
-  }).join('');
-}
-
-// ═══════════════════════════════════════════
-// RICKSHAWS MANAGE
-// ═══════════════════════════════════════════
-function renderRickshawsList() {
-  const rickshaws = getRickshaws();
-  const el = document.getElementById('rickshaws-list');
-  if (!rickshaws.length) {
-    el.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="icon">🛺</div><h3>No Rickshaws Yet</h3><p>Click "+ Add Rickshaw" to get started.</p></div>`;
-    return;
-  }
-  const payments = getPayments();
-  el.innerHTML = rickshaws.map(rk => {
-    const allPays = payments.filter(p => p.rickshawId === rk.id);
-    const totalCollected = allPays.reduce((a,p)=>a+Number(p.amount),0);
-    const totalDays = allPays.reduce((a,p)=>a+Number(p.days||1),0);
-    return `
-    <div class="rickshaw-card">
-      <div class="rk-head">
-        <div>
-          <div class="rk-name">🛺 ${rk.name}</div>
-          <div class="rk-number">${rk.vehicleNo||''}</div>
+// ═══════════════ EXPENSES ═══════════════
+function renderExpenses(){
+  const rks=getRickshaws();
+  let exps=getExpenses();
+  const fRk=document.getElementById('exp-filter-rickshaw')?.value||'';
+  const fCat=document.getElementById('exp-filter-cat')?.value||'';
+  const fMo=document.getElementById('exp-filter-month')?.value||'';
+  if(fRk)exps=exps.filter(e=>e.rickshawId===fRk);
+  if(fCat)exps=exps.filter(e=>e.category===fCat);
+  if(fMo)exps=exps.filter(e=>e.date.startsWith(fMo));
+  exps.sort((a,b)=>b.date.localeCompare(a.date));
+  const tot=exps.reduce((a,e)=>a+Number(e.amount),0);
+  document.getElementById('summary-expenses').innerHTML=`
+    <div class="summary-item"><span class="lbl">Records</span><span class="val">${exps.length}</span></div>
+    <div class="summary-item"><span class="lbl">Total</span><span class="val val-red">৳${fmt(tot)}</span></div>`;
+  const el=document.getElementById('expenses-list');
+  if(!exps.length){el.innerHTML=`<div class="empty-state"><div class="icon">🔧</div><h3>No expenses found</h3></div>`;return}
+  el.innerHTML=exps.map(e=>{
+    const rk=rks.find(r=>r.id===e.rickshawId);
+    return`<div class="mobile-card">
+      <div class="mc-top">
+        <div style="flex:1">
+          <div class="mc-name">${rk?'🛺 '+rk.name:'General'}</div>
+          <div class="mc-meta">
+            <span>${fmtDate(e.date)}</span>
+            <span class="badge badge-yellow">${e.category}</span>
+            ${e.description?`<span>${e.description}</span>`:''}
+          </div>
         </div>
-        <div class="rk-rent">
-          <div class="rk-rent-val">৳${Number(rk.dailyRent||0).toLocaleString()}</div>
-          <div class="rk-rent-label">/ day</div>
+        <div class="mc-right">
+          <div class="mc-amount" style="color:var(--danger)">৳${fmt(Number(e.amount))}</div>
+          <button class="btn btn-danger btn-sm" style="margin-top:5px" onclick="deleteExpense('${e.id}')">Delete</button>
         </div>
-      </div>
-      <div style="margin-bottom:14px">
-        <div style="font-size:13px;margin-bottom:4px">👤 <strong>${rk.userName||'—'}</strong></div>
-        <div style="font-size:12px;color:var(--text3)">Start: ${rk.startDate ? fmtDate(rk.startDate) : '—'}</div>
-        ${rk.notes ? `<div style="font-size:12px;color:var(--text3);margin-top:4px">📝 ${rk.notes}</div>` : ''}
-      </div>
-      <div class="rk-stats">
-        <div class="rk-stat">
-          <div class="rk-stat-val" style="color:var(--accent)">৳${totalCollected.toLocaleString()}</div>
-          <div class="rk-stat-lbl">All-time</div>
-        </div>
-        <div class="rk-stat">
-          <div class="rk-stat-val" style="color:var(--warn)">${totalDays}</div>
-          <div class="rk-stat-lbl">Days Paid</div>
-        </div>
-        <div class="rk-stat">
-          <div class="rk-stat-val">${allPays.length}</div>
-          <div class="rk-stat-lbl">Payments</div>
-        </div>
-      </div>
-      <div class="rk-actions" style="margin-top:14px">
-        <button class="btn btn-ghost btn-sm" onclick="editRickshaw('${rk.id}')">✏️ Edit</button>
-        <button class="btn btn-danger btn-sm" onclick="deleteRickshaw('${rk.id}')">🗑 Delete</button>
       </div>
     </div>`;
   }).join('');
 }
 
-// ═══════════════════════════════════════════
-// REPORT
-// ═══════════════════════════════════════════
-function renderReport() {
-  const { y, m } = reportMonth;
-  document.getElementById('report-month-display').textContent = `${MONTHS[m]} ${y}`;
-  const monthKey = `${y}-${String(m+1).padStart(2,'0')}`;
-  const rickshaws = getRickshaws();
-  const payments  = getPayments().filter(p => p.date.startsWith(monthKey));
-  const expenses  = getExpenses().filter(e => e.date.startsWith(monthKey));
-  const daysInMonth = new Date(y, m+1, 0).getDate();
+// ═══════════════ MANAGE ═══════════════
+function renderManage(){
+  const rks=getRickshaws();
+  const el=document.getElementById('rickshaws-manage');
+  if(!rks.length){el.innerHTML=`<div class="empty-state"><div class="icon">🛺</div><h3>No Rickshaws</h3><p>Tap "+ Add" above.</p></div>`;return}
+  el.innerHTML=rks.map(rk=>{
+    const pays=getPayments().filter(p=>p.rickshawId===rk.id);
+    const totalCollected=pays.reduce((a,p)=>a+Number(p.amount),0);
+    const {totalDue,openingDue,elapsedDays}=calcDue(rk);
+    const due=Math.max(0,totalDue);
+    return`<div class="rk-profile" style="margin-bottom:12px">
+      <div class="rk-profile-header">
+        <div class="rk-avatar">🛺</div>
+        <div class="rk-info">
+          <div class="rk-info-name">${rk.name}
+            <span class="badge ${due>0?'badge-red':'badge-green'}">${due>0?'Due ৳'+fmt(due):'Clear'}</span>
+          </div>
+          <div class="rk-info-sub">👤 ${rk.userName||'—'}${rk.vehicleNo?' · '+rk.vehicleNo:''}</div>
+          <div class="rk-info-rent">৳${fmt(Number(rk.dailyRent||0))}/day · Start: ${rk.startDate?fmtDate(rk.startDate):'—'}</div>
+          ${rk.notes?`<div style="font-size:11px;color:var(--text3);margin-top:3px">📝 ${rk.notes}</div>`:''}
+        </div>
+      </div>
+      <div style="padding:12px 16px">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px;text-align:center">
+          <div style="background:var(--card2);border-radius:8px;padding:10px">
+            <div style="font-family:'Bebas Neue';font-size:18px;color:var(--accent)">৳${fmt(totalCollected)}</div>
+            <div style="font-size:10px;color:var(--text3);text-transform:uppercase">Total Paid</div>
+          </div>
+          <div style="background:var(--card2);border-radius:8px;padding:10px">
+            <div style="font-family:'Bebas Neue';font-size:18px;color:var(--warn)">${elapsedDays}</div>
+            <div style="font-size:10px;color:var(--text3);text-transform:uppercase">Days Elapsed</div>
+          </div>
+          <div style="background:var(--card2);border-radius:8px;padding:10px">
+            <div style="font-family:'Bebas Neue';font-size:18px;color:${due>0?'var(--danger)':'var(--accent)'}">৳${fmt(due)}</div>
+            <div style="font-size:10px;color:var(--text3);text-transform:uppercase">Total Due</div>
+          </div>
+        </div>
+        ${openingDue>0?`<div style="font-size:12px;color:var(--text3);margin-bottom:10px">Opening balance: <span style="color:var(--warn)">৳${fmt(Number(openingDue))}</span></div>`:''}
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-ghost btn-sm" onclick="editRickshaw('${rk.id}')">✏ Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteRickshaw('${rk.id}')">🗑 Delete</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
 
-  const totalIncome = payments.reduce((a,p)=>a+Number(p.amount),0);
-  const totalExp    = expenses.reduce((a,e)=>a+Number(e.amount),0);
-  const net = totalIncome - totalExp;
-
-  let html = `
-  <div class="summary-row">
-    <div class="summary-item"><span class="lbl">Total Income</span><span class="val val-green">৳${totalIncome.toLocaleString()}</span></div>
-    <div class="summary-item"><span class="lbl">Total Expenses</span><span class="val val-red">৳${totalExp.toLocaleString()}</span></div>
-    <div class="summary-item"><span class="lbl">Net Profit</span><span class="val ${net>=0?'val-green':'val-red'}">৳${net.toLocaleString()}</span></div>
-    <div class="summary-item"><span class="lbl">Days in Month</span><span class="val val-white">${daysInMonth}</span></div>
+// ═══════════════ REPORT ═══════════════
+function renderReport(){
+  const {y,m}=reportMonth;
+  document.getElementById('report-month-display').textContent=`${MONTHS[m].slice(0,3)} ${y}`;
+  const mk=`${y}-${String(m+1).padStart(2,'0')}`;
+  const rks=getRickshaws();
+  const mPays=getPayments().filter(p=>p.date.startsWith(mk));
+  const mExps=getExpenses().filter(e=>e.date.startsWith(mk));
+  const tIncome=mPays.reduce((a,p)=>a+Number(p.amount),0);
+  const tExp=mExps.reduce((a,e)=>a+Number(e.amount),0);
+  const net=tIncome-tExp;
+  let html=`<div class="summary-row">
+    <div class="summary-item"><span class="lbl">Income</span><span class="val val-green">৳${fmt(tIncome)}</span></div>
+    <div class="summary-item"><span class="lbl">Expenses</span><span class="val val-red">৳${fmt(tExp)}</span></div>
+    <div class="summary-item"><span class="lbl">Net</span><span class="val ${net>=0?'val-green':'val-red'}">৳${fmt(net)}</span></div>
   </div>`;
-
-  // Per-rickshaw breakdown
-  if (rickshaws.length) {
-    html += `<div class="section-title" style="margin-bottom:16px">Per-Rickshaw Breakdown</div>`;
-    html += `<div class="rickshaw-grid">`;
-    rickshaws.forEach(rk => {
-      const rkPays = payments.filter(p=>p.rickshawId===rk.id);
-      const rkExps = expenses.filter(e=>e.rickshawId===rk.id);
-      const paidAmt  = rkPays.reduce((a,p)=>a+Number(p.amount),0);
-      const paidDays = rkPays.reduce((a,p)=>a+Number(p.days||1),0);
-      const expAmt   = rkExps.reduce((a,e)=>a+Number(e.amount),0);
-      const expected = daysInMonth * Number(rk.dailyRent||0);
-      const due = Math.max(0, expected - paidAmt);
-      const pct = expected > 0 ? Math.min(100, Math.round(paidAmt/expected*100)) : 0;
-
-      html += `
-      <div class="rickshaw-card">
-        <div class="rk-head">
-          <div><div class="rk-name">🛺 ${rk.name}</div><div class="rk-number">${rk.userName||''}</div></div>
-          <div class="rk-rent"><div class="rk-rent-val">৳${Number(rk.dailyRent||0)}/day</div></div>
+  rks.forEach(rk=>{
+    const rkPays=mPays.filter(p=>p.rickshawId===rk.id);
+    const rkExps=mExps.filter(e=>e.rickshawId===rk.id);
+    const paidAmt=rkPays.reduce((a,p)=>a+Number(p.amount),0);
+    const paidDays=rkPays.reduce((a,p)=>a+Number(p.days||1),0);
+    const expAmt=rkExps.reduce((a,e)=>a+Number(e.amount),0);
+    const {totalDue,openingDue}=calcDue(rk);
+    const {daysInMonth,expected,dueThisMonth,missedDays,daysPassed}=calcMonthInfo(rk,y,m);
+    const pct=expected>0?Math.min(100,Math.round(paidAmt/expected*100)):0;
+    const due=Math.max(0,totalDue);
+    html+=`<div class="report-rk">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <div style="font-weight:700">🛺 ${rk.name} · ${rk.userName||''}</div>
+        <span class="badge ${due>0?'badge-red':'badge-green'}">${due>0?'Due ৳'+fmt(due):'Clear'}</span>
+      </div>
+      <div class="report-row"><span style="color:var(--text3)">Expected this month (${daysInMonth} days)</span><span>৳${fmt(expected)}</span></div>
+      <div class="report-row"><span style="color:var(--text3)">Collected this month</span><span style="color:var(--accent)">৳${fmt(paidAmt)}</span></div>
+      <div class="report-row"><span style="color:var(--text3)">Rent days paid</span><span style="color:var(--warn)">${paidDays} days</span></div>
+      <div class="report-row"><span style="color:var(--text3)">Missed days (${daysPassed} days elapsed)</span><span style="color:var(--danger)">${missedDays} days · ৳${fmt(dueThisMonth)}</span></div>
+      <div class="report-row"><span style="color:var(--text3)">Expenses this month</span><span style="color:var(--danger)">৳${fmt(expAmt)}</span></div>
+      ${openingDue>0?`<div class="report-row"><span style="color:var(--text3)">Opening balance</span><span style="color:var(--warn)">৳${fmt(Number(openingDue))}</span></div>`:''}
+      <div class="report-row"><span>All-time outstanding due</span><span style="color:${due>0?'var(--danger)':'var(--accent)'}">৳${fmt(due)}</span></div>
+      <div class="report-row"><span>Net (collected − expenses)</span><span style="color:${(paidAmt-expAmt)>=0?'var(--accent)':'var(--danger)'}">৳${fmt(paidAmt-expAmt)}</span></div>
+      <div style="margin-top:10px">
+        <div class="progress-label">${pct}% of monthly rent collected</div>
+        <div class="progress-bar"><div class="progress-fill ${pct<50?'red':''}" style="width:${pct}%"></div></div>
+      </div>
+    </div>`;
+  });
+  if(mExps.length){
+    const cats={};
+    mExps.forEach(e=>{cats[e.category]=(cats[e.category]||0)+Number(e.amount)});
+    html+=`<div class="divider"></div><div class="section-title" style="margin-bottom:10px">Expense Breakdown</div>`;
+    Object.entries(cats).sort((a,b)=>b[1]-a[1]).forEach(([cat,amt])=>{
+      html+=`<div class="mobile-card" style="margin-bottom:6px">
+        <div class="mc-top">
+          <span class="badge badge-yellow">${cat}</span>
+          <span style="color:var(--danger);font-family:'Bebas Neue';font-size:16px">৳${fmt(amt)}</span>
         </div>
-        <table style="width:100%;font-size:13px;border-collapse:collapse">
-          <tr><td style="padding:5px 0;color:var(--text3)">Expected (${daysInMonth} days)</td><td style="text-align:right;color:var(--text)">৳${expected.toLocaleString()}</td></tr>
-          <tr><td style="padding:5px 0;color:var(--text3)">Collected</td><td style="text-align:right;color:var(--accent)">৳${paidAmt.toLocaleString()}</td></tr>
-          <tr><td style="padding:5px 0;color:var(--text3)">Days Paid</td><td style="text-align:right;color:var(--warn)">${paidDays} / ${daysInMonth}</td></tr>
-          <tr><td style="padding:5px 0;color:var(--text3)">Due / Missed</td><td style="text-align:right;color:${due>0?'var(--danger)':'var(--accent)'}">৳${due.toLocaleString()}</td></tr>
-          <tr><td style="padding:5px 0;color:var(--text3)">Expenses</td><td style="text-align:right;color:var(--danger)">৳${expAmt.toLocaleString()}</td></tr>
-          <tr style="border-top:1px solid var(--border)"><td style="padding:8px 0 0;font-weight:700">Net from this rickshaw</td><td style="text-align:right;font-weight:700;color:${(paidAmt-expAmt)>=0?'var(--accent)':'var(--danger)'}">৳${(paidAmt-expAmt).toLocaleString()}</td></tr>
-        </table>
-        <div class="progress-bar" style="margin-top:12px"><div class="progress-fill" style="width:${pct}%"></div></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:5px">${pct}% of monthly target collected</div>
       </div>`;
     });
-    html += `</div>`;
   }
-
-  // Expense breakdown by category
-  if (expenses.length) {
-    const cats = {};
-    expenses.forEach(e => { cats[e.category] = (cats[e.category]||0)+Number(e.amount); });
-    html += `<div class="divider"></div><div class="section-title" style="margin-bottom:16px">Expense Breakdown</div>`;
-    html += `<div class="table-wrap"><table><thead><tr><th>Category</th><th>Count</th><th>Total (৳)</th></tr></thead><tbody>`;
-    Object.entries(cats).sort((a,b)=>b[1]-a[1]).forEach(([cat,amt]) => {
-      const cnt = expenses.filter(e=>e.category===cat).length;
-      html += `<tr><td><span class="badge badge-yellow">${cat}</span></td><td>${cnt}</td><td class="td-amount neg">৳${amt.toLocaleString()}</td></tr>`;
-    });
-    html += `</tbody></table></div>`;
-  }
-
-  document.getElementById('report-content').innerHTML = html;
+  document.getElementById('report-content').innerHTML=html;
 }
 
-// ═══════════════════════════════════════════
-// SELECTS
-// ═══════════════════════════════════════════
-function populateSelects() {
-  const rickshaws = getRickshaws();
-  ['pay-rickshaw','exp-rickshaw','pay-filter-rickshaw','exp-filter-rickshaw'].forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const cur = el.value;
-    const isFilter = id.includes('filter');
-    const isExp = id.includes('exp');
-    el.innerHTML = (isFilter ? '<option value="">All Rickshaws</option>' : '') +
-      (isExp && !isFilter ? '<option value="general">General</option>' : '') +
-      rickshaws.map(r => `<option value="${r.id}" ${cur===r.id?'selected':''}>${r.name} (${r.userName||''})</option>`).join('');
+// ═══════════════ SELECTS ═══════════════
+function populateSelects(){
+  const rks=getRickshaws();
+  ['pay-rickshaw','exp-rickshaw','pay-filter-rickshaw','exp-filter-rickshaw'].forEach(id=>{
+    const el=document.getElementById(id);if(!el)return;
+    const cur=el.value;
+    const isFilter=id.includes('filter');
+    const isExp=id.includes('exp');
+    el.innerHTML=(isFilter?'<option value="">All Rickshaws</option>':'')+
+      (isExp&&!isFilter?'<option value="general">General</option>':'')+
+      rks.map(r=>`<option value="${r.id}"${cur===r.id?' selected':''}>${r.name} (${r.userName||''})</option>`).join('');
   });
 }
 
-// ═══════════════════════════════════════════
-// MODALS
-// ═══════════════════════════════════════════
-function openModal(type) {
+// ═══════════════ MODALS ═══════════════
+function openModal(type){
   populateSelects();
-  // Set today's date
-  const todayStr = today.toISOString().split('T')[0];
-  if (type==='payment') {
-    document.getElementById('pay-date').value = todayStr;
-    document.getElementById('pay-amount').value = '';
-    document.getElementById('pay-days').value = '1';
-    document.getElementById('pay-from').value = '';
-    document.getElementById('pay-note').value = '';
+  if(type==='payment'){
+    document.getElementById('pay-date').value=todayStr;
+    ['pay-amount','pay-note'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('pay-days').value='1';
+    document.getElementById('pay-from').value='';
+    updatePayHint();
   }
-  if (type==='expense') {
-    document.getElementById('exp-date').value = todayStr;
-    document.getElementById('exp-amount').value = '';
-    document.getElementById('exp-desc').value = '';
+  if(type==='expense'){
+    document.getElementById('exp-date').value=todayStr;
+    ['exp-amount','exp-desc'].forEach(id=>document.getElementById(id).value='');
   }
-  if (type==='rickshaw') {
-    document.getElementById('rkEdit-id').value = '';
-    document.getElementById('modal-rickshaw-title').textContent = 'Add New Rickshaw';
-    document.getElementById('rk-name').value = '';
-    document.getElementById('rk-number').value = '';
-    document.getElementById('rk-user').value = '';
-    document.getElementById('rk-rent').value = '';
-    document.getElementById('rk-start').value = todayStr;
-    document.getElementById('rk-notes').value = '';
+  if(type==='rickshaw'){
+    document.getElementById('rkEdit-id').value='';
+    document.getElementById('modal-rickshaw-title').textContent='Add Rickshaw';
+    ['rk-name','rk-number','rk-user','rk-notes'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('rk-rent').value='';
+    document.getElementById('rk-start').value=todayStr;
+    document.getElementById('rk-opening-due').value='0';
   }
   document.getElementById('modal-'+type).classList.add('open');
 }
+function closeModal(type){document.getElementById('modal-'+type).classList.remove('open')}
+document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open')}));
+function quickPayment(rkId){openModal('payment');setTimeout(()=>{document.getElementById('pay-rickshaw').value=rkId;updatePayHint()},50)}
+function quickExpense(rkId){openModal('expense');setTimeout(()=>{document.getElementById('exp-rickshaw').value=rkId},50)}
 
-function closeModal(type) {
-  document.getElementById('modal-'+type).classList.remove('open');
-}
-
-function quickPayment(rkId) {
-  openModal('payment');
-  const sel = document.getElementById('pay-rickshaw');
-  if (sel) sel.value = rkId;
-}
-function quickExpense(rkId) {
-  openModal('expense');
-  const sel = document.getElementById('exp-rickshaw');
-  if (sel) sel.value = rkId;
-}
-
-// Close modal on overlay click
-document.querySelectorAll('.modal-overlay').forEach(o => {
-  o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
-});
-
-// ═══════════════════════════════════════════
-// CRUD
-// ═══════════════════════════════════════════
-function saveRickshaw() {
-  const id    = document.getElementById('rkEdit-id').value;
-  const name  = document.getElementById('rk-name').value.trim();
-  const vehicleNo = document.getElementById('rk-number').value.trim();
-  const userName  = document.getElementById('rk-user').value.trim();
-  const dailyRent = document.getElementById('rk-rent').value;
-  const startDate = document.getElementById('rk-start').value;
-  const notes     = document.getElementById('rk-notes').value.trim();
-
-  if (!name) { toast('Rickshaw name is required', true); return; }
-  if (!dailyRent || isNaN(dailyRent)) { toast('Daily rent must be a number', true); return; }
-
-  const rickshaws = getRickshaws();
-  if (id) {
-    const i = rickshaws.findIndex(r=>r.id===id);
-    if (i>=0) rickshaws[i] = {...rickshaws[i], name, vehicleNo, userName, dailyRent, startDate, notes};
-  } else {
-    rickshaws.push({ id: uid(), name, vehicleNo, userName, dailyRent, startDate, notes });
+function updatePayHint(){
+  const rk=getRickshaws().find(r=>r.id===document.getElementById('pay-rickshaw').value);
+  if(rk){
+    const {totalDue}=calcDue(rk);
+    const due=Math.max(0,totalDue);
+    document.getElementById('pay-hint').innerHTML=
+      `Daily rent: <b style="color:var(--accent)">৳${fmt(Number(rk.dailyRent||0))}</b>. `+
+      (due>0?`Outstanding due: <b style="color:var(--danger)">৳${fmt(due)}</b>. `:'All clear! ')+
+      `Entering days auto-fills amount.`;
   }
-  saveRickshaws(rickshaws);
-  closeModal('rickshaw');
-  refreshAll();
-  toast(id ? 'Rickshaw updated!' : 'Rickshaw added!');
+}
+function autoCalcDays(){
+  const rk=getRickshaws().find(r=>r.id===document.getElementById('pay-rickshaw').value);
+  if(!rk||!rk.dailyRent)return;
+  const amt=Number(document.getElementById('pay-amount').value);
+  if(amt>0)document.getElementById('pay-days').value=Math.round(amt/Number(rk.dailyRent));
+}
+function autoCalcAmount(){
+  const rk=getRickshaws().find(r=>r.id===document.getElementById('pay-rickshaw').value);
+  if(!rk||!rk.dailyRent)return;
+  const days=Number(document.getElementById('pay-days').value);
+  if(days>0)document.getElementById('pay-amount').value=days*Number(rk.dailyRent);
 }
 
-function editRickshaw(rkId) {
-  const rk = getRickshaws().find(r=>r.id===rkId);
-  if (!rk) return;
-  document.getElementById('rkEdit-id').value = rk.id;
-  document.getElementById('modal-rickshaw-title').textContent = 'Edit Rickshaw';
-  document.getElementById('rk-name').value = rk.name||'';
-  document.getElementById('rk-number').value = rk.vehicleNo||'';
-  document.getElementById('rk-user').value = rk.userName||'';
-  document.getElementById('rk-rent').value = rk.dailyRent||'';
-  document.getElementById('rk-start').value = rk.startDate||'';
-  document.getElementById('rk-notes').value = rk.notes||'';
+// ═══════════════ CRUD ═══════════════
+function saveRickshaw(){
+  const id=document.getElementById('rkEdit-id').value;
+  const name=document.getElementById('rk-name').value.trim();
+  const vehicleNo=document.getElementById('rk-number').value.trim();
+  const userName=document.getElementById('rk-user').value.trim();
+  const dailyRent=document.getElementById('rk-rent').value;
+  const startDate=document.getElementById('rk-start').value;
+  const openingDue=document.getElementById('rk-opening-due').value||'0';
+  const notes=document.getElementById('rk-notes').value.trim();
+  if(!name){toast('Rickshaw name required',true);return}
+  if(!dailyRent||isNaN(dailyRent)){toast('Daily rent required',true);return}
+  if(!startDate){toast('Start date required',true);return}
+  const rks=getRickshaws();
+  if(id){const i=rks.findIndex(r=>r.id===id);if(i>=0)rks[i]={...rks[i],name,vehicleNo,userName,dailyRent,startDate,openingDue,notes}}
+  else rks.push({id:uid(),name,vehicleNo,userName,dailyRent,startDate,openingDue,notes});
+  saveRickshaws(rks);closeModal('rickshaw');refreshAll();toast(id?'Rickshaw updated!':'Rickshaw added!');
+}
+function editRickshaw(rkId){
+  const rk=getRickshaws().find(r=>r.id===rkId);if(!rk)return;
+  document.getElementById('rkEdit-id').value=rk.id;
+  document.getElementById('modal-rickshaw-title').textContent='Edit Rickshaw';
+  document.getElementById('rk-name').value=rk.name||'';
+  document.getElementById('rk-number').value=rk.vehicleNo||'';
+  document.getElementById('rk-user').value=rk.userName||'';
+  document.getElementById('rk-rent').value=rk.dailyRent||'';
+  document.getElementById('rk-start').value=rk.startDate||'';
+  document.getElementById('rk-opening-due').value=rk.openingDue||'0';
+  document.getElementById('rk-notes').value=rk.notes||'';
   document.getElementById('modal-rickshaw').classList.add('open');
 }
-
-function deleteRickshaw(rkId) {
-  if (!confirm('Delete this rickshaw? All related payments and expenses will remain but be unlinked.')) return;
-  saveRickshaws(getRickshaws().filter(r=>r.id!==rkId));
-  refreshAll();
-  toast('Rickshaw deleted.');
+function deleteRickshaw(rkId){
+  if(!confirm('Delete this rickshaw?'))return;
+  saveRickshaws(getRickshaws().filter(r=>r.id!==rkId));refreshAll();toast('Deleted.');
+}
+function savePayment(){
+  const rkId=document.getElementById('pay-rickshaw').value;
+  const date=document.getElementById('pay-date').value;
+  const amount=document.getElementById('pay-amount').value;
+  const days=document.getElementById('pay-days').value||'1';
+  const from=document.getElementById('pay-from').value;
+  const note=document.getElementById('pay-note').value.trim();
+  if(!rkId){toast('Select a rickshaw',true);return}
+  if(!date){toast('Date required',true);return}
+  if(!amount||isNaN(amount)||Number(amount)<=0){toast('Enter valid amount',true);return}
+  const pays=getPayments();
+  pays.push({id:uid(),rickshawId:rkId,date,amount:Number(amount),days:Number(days),fromDate:from||null,note});
+  savePayments(pays);closeModal('payment');refreshAll();toast(`৳${fmt(Number(amount))} saved!`);
+}
+function deletePayment(id){
+  if(!confirm('Delete this payment?'))return;
+  savePayments(getPayments().filter(p=>p.id!==id));refreshAll();toast('Deleted.');
+}
+function saveExpense(){
+  const rkId=document.getElementById('exp-rickshaw').value;
+  const date=document.getElementById('exp-date').value;
+  const cat=document.getElementById('exp-cat').value;
+  const amount=document.getElementById('exp-amount').value;
+  const desc=document.getElementById('exp-desc').value.trim();
+  if(!date){toast('Date required',true);return}
+  if(!amount||isNaN(amount)||Number(amount)<=0){toast('Enter valid amount',true);return}
+  const exps=getExpenses();
+  exps.push({id:uid(),rickshawId:rkId==='general'?null:rkId,date,category:cat,amount:Number(amount),description:desc});
+  saveExpenses(exps);closeModal('expense');refreshAll();toast(`৳${fmt(Number(amount))} saved!`);
+}
+function deleteExpense(id){
+  if(!confirm('Delete this expense?'))return;
+  saveExpenses(getExpenses().filter(e=>e.id!==id));refreshAll();toast('Deleted.');
 }
 
-function savePayment() {
-  const rkId   = document.getElementById('pay-rickshaw').value;
-  const date   = document.getElementById('pay-date').value;
-  const amount = document.getElementById('pay-amount').value;
-  const days   = document.getElementById('pay-days').value || '1';
-  const from   = document.getElementById('pay-from').value;
-  const note   = document.getElementById('pay-note').value.trim();
-
-  if (!rkId)   { toast('Select a rickshaw', true); return; }
-  if (!date)   { toast('Date is required', true); return; }
-  if (!amount || isNaN(amount) || Number(amount)<=0) { toast('Enter a valid amount', true); return; }
-
-  const payments = getPayments();
-  payments.push({ id: uid(), rickshawId: rkId, date, amount: Number(amount), days: Number(days), fromDate: from||null, note });
-  savePayments(payments);
-  closeModal('payment');
-  refreshAll();
-  toast(`Payment of ৳${Number(amount).toLocaleString()} saved!`);
+// ═══════════════ EXPORT ═══════════════
+function exportData(){
+  const data={rickshaws:getRickshaws(),payments:getPayments(),expenses:getExpenses(),exported:new Date().toISOString()};
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
+  a.download=`rickshaw-backup-${todayStr}.json`;a.click();toast('Exported!');
 }
 
-function deletePayment(id) {
-  if (!confirm('Delete this payment?')) return;
-  savePayments(getPayments().filter(p=>p.id!==id));
-  refreshAll();
-  toast('Payment deleted.');
+// ═══════════════ HELPERS ═══════════════
+function fmt(n){return Number(n).toLocaleString('en-IN')}
+function fmtDate(d){if(!d)return'—';return new Date(d+'T00:00:00').toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}
+function toast(msg,isError=false){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className='show'+(isError?' error':'');
+  setTimeout(()=>t.className='',2500);
 }
 
-function saveExpense() {
-  const rkId  = document.getElementById('exp-rickshaw').value;
-  const date  = document.getElementById('exp-date').value;
-  const cat   = document.getElementById('exp-cat').value;
-  const amount= document.getElementById('exp-amount').value;
-  const desc  = document.getElementById('exp-desc').value.trim();
-
-  if (!date)   { toast('Date is required', true); return; }
-  if (!amount || isNaN(amount) || Number(amount)<=0) { toast('Enter a valid amount', true); return; }
-
-  const expenses = getExpenses();
-  expenses.push({ id: uid(), rickshawId: rkId==='general'?null:rkId, date, category: cat, amount: Number(amount), description: desc });
-  saveExpenses(expenses);
-  closeModal('expense');
-  refreshAll();
-  toast(`Expense of ৳${Number(amount).toLocaleString()} saved!`);
-}
-
-function deleteExpense(id) {
-  if (!confirm('Delete this expense?')) return;
-  saveExpenses(getExpenses().filter(e=>e.id!==id));
-  refreshAll();
-  toast('Expense deleted.');
-}
-
-// ═══════════════════════════════════════════
-// HELPERS
-// ═══════════════════════════════════════════
-function fmtDate(d) {
-  if (!d) return '—';
-  const dt = new Date(d + 'T00:00:00');
-  return dt.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' });
-}
-
-function toast(msg, isError=false) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'show' + (isError ? ' error' : '');
-  setTimeout(() => t.className = '', 2500);
-}
-
-// ═══════════════════════════════════════════
-// SEED DATA for first-time users
-// ═══════════════════════════════════════════
-function seedIfEmpty() {
-  if (getRickshaws().length > 0) return;
-  const r1 = uid(), r2 = uid();
+// ═══════════════ SEED ═══════════════
+function seedIfEmpty(){
+  if(getRickshaws().length>0)return;
+  const r1=uid(),r2=uid();
+  const start=new Date(today);start.setMonth(start.getMonth()-3);
+  const startStr=start.toISOString().split('T')[0];
   saveRickshaws([
-    { id:r1, name:'Rickshaw #1', vehicleNo:'DHA-001', userName:'Dilay', dailyRent:'200', startDate:'2025-01-01', notes:'Blue colored rickshaw' },
-    { id:r2, name:'Rickshaw #2', vehicleNo:'DHA-002', userName:'Rahim',  dailyRent:'180', startDate:'2025-01-01', notes:'Yellow colored rickshaw' },
+    {id:r1,name:'Rickshaw #1',vehicleNo:'DHA-001',userName:'Dilay',dailyRent:'200',startDate:startStr,openingDue:'5000',notes:'Blue rickshaw'},
+    {id:r2,name:'Rickshaw #2',vehicleNo:'DHA-002',userName:'Rahim', dailyRent:'180',startDate:startStr,openingDue:'3000',notes:'Yellow rickshaw'},
   ]);
-  const todayStr = today.toISOString().split('T')[0];
-  const ym = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`;
+  const ym=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`;
+  const pm=today.getMonth()===0?`${today.getFullYear()-1}-12`:`${today.getFullYear()}-${String(today.getMonth()).padStart(2,'0')}`;
   savePayments([
-    { id:uid(), rickshawId:r1, date:`${ym}-05`, amount:600, days:3, fromDate:`${ym}-03`, note:'3 days combined' },
-    { id:uid(), rickshawId:r1, date:`${ym}-10`, amount:200, days:1, fromDate:null, note:'' },
-    { id:uid(), rickshawId:r2, date:`${ym}-07`, amount:360, days:2, fromDate:`${ym}-06`, note:'2 days' },
-    { id:uid(), rickshawId:r2, date:`${ym}-12`, amount:180, days:1, fromDate:null, note:'' },
+    {id:uid(),rickshawId:r1,date:`${pm}-10`,amount:4000,days:20,fromDate:`${pm}-01`,note:'Partial last month'},
+    {id:uid(),rickshawId:r1,date:`${ym}-05`,amount:600, days:3, fromDate:`${ym}-03`,note:'3 days combined'},
+    {id:uid(),rickshawId:r1,date:`${ym}-10`,amount:200, days:1, fromDate:null,note:''},
+    {id:uid(),rickshawId:r2,date:`${pm}-15`,amount:3600,days:20,fromDate:`${pm}-01`,note:'Last month rent'},
+    {id:uid(),rickshawId:r2,date:`${ym}-07`,amount:360, days:2, fromDate:`${ym}-06`,note:'2 days'},
+    {id:uid(),rickshawId:r2,date:`${ym}-12`,amount:180, days:1, fromDate:null,note:''},
   ]);
   saveExpenses([
-    { id:uid(), rickshawId:r1, date:`${ym}-08`, category:'Repair', amount:500, description:'Brake repair' },
-    { id:uid(), rickshawId:r2, date:`${ym}-11`, category:'Maintenance', amount:200, description:'Tyre pump and oil' },
+    {id:uid(),rickshawId:r1,date:`${ym}-08`,category:'Repair',amount:500,description:'Brake repair'},
+    {id:uid(),rickshawId:r2,date:`${ym}-11`,category:'Maintenance',amount:200,description:'Tyre pump'},
   ]);
 }
 
-// ═══════════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════════
+// ═══════════════ INIT ═══════════════
 seedIfEmpty();
+const nowMonth=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`;
 refreshAll();
-
-// Set current month as default for filters
-const nowMonth = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`;
-document.getElementById('pay-filter-month').value = nowMonth;
-document.getElementById('exp-filter-month').value = nowMonth;
-renderPayments();
-renderExpenses();
+document.getElementById('pay-filter-month').value=nowMonth;
+document.getElementById('exp-filter-month').value=nowMonth;
+renderPayments();renderExpenses();
 </script>
 </body>
 </html>
